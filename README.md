@@ -9,4 +9,3 @@ This simple module allows to preview an audio file from file picker. LibWrapper 
 ## Planned features
  * add a volume slider in module configuration
  * add a loop toggle in module configuration
- * add a indicator while loading audio file
