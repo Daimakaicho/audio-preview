@@ -1,74 +1,104 @@
 'use strict';
 const MODULE_ID = "audio-preview";
-const CONTROLS_TEMPLATE_PATH = `modules/${MODULE_ID}/module/templates/audio-controls.hbs`;
 
 class AudioPreview {
+
+    static PLAY_STATE = {
+        INIT: 0,
+        PLAYING: 1,
+        WAITING: 2,
+        LOADING: 3
+    }
+
     constructor() {
+        this._state = AudioPreview.PLAY_STATE.WAITING;
         this.selectedTrack = undefined;
         this.selectedSound = undefined;
-        this.loopMode = false;
     }
 
     _canPlayback(){
-        return CONST.AUDIO_FILE_EXTENSIONS.includes(this.selectedTrack.split('.').pop().toLowerCase())
-    }
-
-    async _renderControls() {
-        return renderTemplate(CONTROLS_TEMPLATE_PATH);
-    }
-
-    async loadControls() {
-        await loadTemplates(CONTROLS_TEMPLATE_PATH);
+        return this.selectedTrack ? CONST.AUDIO_FILE_EXTENSIONS.includes(this.selectedTrack.split('.').pop().toLowerCase()) : false;
     }
 
     async _onPick(args) {
         const li = args[0].currentTarget;
         this.selectedTrack = li.dataset.path;
-        $(this._playButton).prop("disabled", !this._canPlayback())
+        this._applyState();
     }
 
-    _switchPlayStopIcon(button) {
-        $(button).find("i").removeClass("fa-spinner");
-        $(button).find("i").toggleClass(["fa-play", "fa-stop"]);
+    get state() {
+        return this._state;
     }
 
-    _switchToLoadingState(button) {
-        $(button).find("i").addClass(["fa-spinner"]);
+    set state(value) {
+        const stateApplied = this._applyState(value);
+        if (stateApplied) {
+            this._state = value;
+        }
+    }
+
+    _applyState(value) {
+        if (value === undefined) value = this.state;
+
+        switch (value) {
+
+            case AudioPreview.PLAY_STATE.WAITING:
+                this._playButton.find("i")
+                    .removeClass(["fa-spinner", "fa-spin", "fa-stop"])
+                    .addClass(["fa-play"]);
+                this._playButton.prop("disabled", !this._canPlayback());
+                return true;
+
+            case AudioPreview.PLAY_STATE.PLAYING:
+                this._playButton.find("i")
+                    .removeClass(["fa-spinner", "fa-spin", "fa-play"])
+                    .addClass(["fa-stop"]);
+                this._playButton.prop("disabled", !this._canPlayback());
+                return true;
+
+            case AudioPreview.PLAY_STATE.LOADING:
+                this._playButton.find("i")
+                    .removeClass(["fa-play", "fa-stop"])
+                    .addClass(["fa-spinner", "fa-spin"]);
+                this._playButton.prop("disabled", true);
+                return true;
+
+            default: return false;
+        }
+    }
+
+    async _onClick() {
+        if (this.state === AudioPreview.PLAY_STATE.PLAYING) {
+            this.selectedSound.stop();
+            this.state = AudioPreview.PLAY_STATE.WAITING;
+            return;
+        }
+        this.state = AudioPreview.PLAY_STATE.LOADING;
+        this.selectedSound = await AudioHelper.play({src: this.selectedTrack, volume: 0.5}, false);
+        this.selectedSound.on('end', () => this.state = AudioPreview.PLAY_STATE.WAITING);
+        this.state = AudioPreview.PLAY_STATE.PLAYING;
     }
 
     async _activateListeners(button) {
         button.on('click', async (event) => {
             event.preventDefault();
-            if (!this._canPlayback()) {
-                // not a sound file, do nothing
-            } else {
-                // Is already a sound playing ?
-                if (this.selectedSound && this.selectedSound.playing) {
-                    this.selectedSound.stop();
-                    this._switchPlayStopIcon(event.currentTarget);
-                    return;
-                }
-                this._switchToLoadingState(event.currentTarget);
-                this.selectedSound = await AudioHelper.play({src: this.selectedTrack, volume: 0.5}, false);
-                this.selectedSound.on('end', () => this._switchPlayStopIcon(event.currentTarget));
-                this._switchPlayStopIcon(event.currentTarget);
-            }
+            await this._onClick()
         });
     }
 
     async _onRenderFilePicker(app, html, data) {
-        //const playButtonHtml = await this._renderControls();
 
-        const playButton = $("<button>") // $(playButtonHtml);
-        playButton.append($("<i>").addClass([ "fas", (this.selectedSound && this.selectedSound.playing) ? "fa-stop" : "fa-play"]));
-        $("footer.form-footer > .selected-file").append(playButton);
+        const playButton = $("<button>");
+        playButton.append($("<i>").addClass("fas"));
         await this._activateListeners(playButton);
+        this._playButton = playButton;
+        this._applyState();
+
+        html.find("footer.form-footer > .selected-file").append(playButton);
         playButton.css({
             "max-width": "30px",
             "margin-left": "5px"
         });
-        playButton.prop("disabled", true);
-        this._playButton = playButton;
     }
 
 }
