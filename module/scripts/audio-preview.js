@@ -1,7 +1,6 @@
 'use strict';
 const MODULE_ID = "audio-preview";
 const CONTROLS_TEMPLATE_PATH = `modules/${MODULE_ID}/module/templates/audio-controls.hbs`;
-const SUPPORTED_AUDIO_FORMAT = ["wav", "mp3", "flac", "webm", "ogg"]
 
 class AudioPreview {
     constructor() {
@@ -11,7 +10,7 @@ class AudioPreview {
     }
 
     _canPlayback(){
-        return SUPPORTED_AUDIO_FORMAT.includes(this.selectedTrack.split('.').pop().toLowerCase())
+        return CONST.AUDIO_FILE_EXTENSIONS.includes(this.selectedTrack.split('.').pop().toLowerCase())
     }
 
     async _renderControls() {
