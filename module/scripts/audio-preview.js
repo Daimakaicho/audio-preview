@@ -24,10 +24,16 @@ class AudioPreview {
     async _onPick(args) {
         const li = args[0].currentTarget;
         this.selectedTrack = li.dataset.path;
+        $(this._playButton).prop("disabled", !this._canPlayback())
     }
 
     _switchPlayStopIcon(button) {
+        $(button).find("i").removeClass("fa-spinner");
         $(button).find("i").toggleClass(["fa-play", "fa-stop"]);
+    }
+
+    _switchToLoadingState(button) {
+        $(button).find("i").addClass(["fa-spinner"]);
     }
 
     async _activateListeners(button) {
@@ -42,7 +48,7 @@ class AudioPreview {
                     this._switchPlayStopIcon(event.currentTarget);
                     return;
                 }
-
+                this._switchToLoadingState(event.currentTarget);
                 this.selectedSound = await AudioHelper.play({src: this.selectedTrack, volume: 0.5}, false);
                 this.selectedSound.on('end', () => this._switchPlayStopIcon(event.currentTarget));
                 this._switchPlayStopIcon(event.currentTarget);
@@ -61,6 +67,8 @@ class AudioPreview {
             "max-width": "30px",
             "margin-left": "5px"
         });
+        playButton.prop("disabled", true);
+        this._playButton = playButton;
     }
 
 }
