@@ -1,0 +1,26 @@
+{
+    "name": "sound-preview",
+    "title": "Sound preview",
+    "description": "This module allow to preview a sound from file picker.",
+    "version": "0.0.1",
+    "authors": [
+		"Daimakaicho#5991"
+	],
+    "minimumCoreVersion": "0.7.9",
+    "compatibleCoreVersion": "0.8.8",
+    "esmodules": [
+        "module/scripts/sound-preview.js"
+    ],
+    "styles":[
+        "module/styles/sound-controls.css"
+    ],
+    "dependencies": [
+        {
+            "name": "lib-wrapper",
+            "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json"
+        }
+    ],
+    "url": "https://github.com/Daimakaicho/sound-preview",
+    "manifest": "https://github.com/Daimakaicho/sound-preview/releases/latest/download/module.json",
+    "download": "https://github.com/Daimakaicho/sound-preview/releases/download/v0.0.1/module.zip"
+}
