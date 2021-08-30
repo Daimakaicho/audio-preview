@@ -53,7 +53,7 @@ class AudioPreview {
                 this._playButton.find("i")
                     .removeClass(["fa-spinner", "fa-spin", "fa-play"])
                     .addClass(["fa-stop"]);
-                this._playButton.prop("disabled", !this._canPlayback());
+                this._playButton.prop("disabled", false);
                 return true;
 
             case AudioPreview.PLAY_STATE.LOADING:
