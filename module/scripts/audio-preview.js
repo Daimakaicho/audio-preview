@@ -74,7 +74,11 @@ class AudioPreview {
             return;
         }
         this.state = AudioPreview.PLAY_STATE.LOADING;
-        this.selectedSound = await AudioHelper.play({src: this.selectedTrack, volume: 0.5}, false);
+        this.selectedSound = await AudioHelper.play({
+            src: this.selectedTrack,
+            volume: game.settings.get(MODULE_ID, "AudioPreview.Volume"),
+            loop: game.settings.get(MODULE_ID, "AudioPreview.LoopMode")
+        }, false);
         this.selectedSound.on('end', () => this.state = AudioPreview.PLAY_STATE.WAITING);
         this.state = AudioPreview.PLAY_STATE.PLAYING;
     }
@@ -117,3 +121,29 @@ Hooks.once('init', async () => {
     //await game.soundPreview.loadControls();
 })
 
+Hooks.once('ready', async () => {
+
+    game.settings.register(MODULE_ID, "AudioPreview.Volume", {
+        name: game.i18n.localize("AudioPreview.Settings.Volume.Title"),
+        hint: game.i18n.localize("AudioPreview.Settings.Volume.Description"),
+        scope: "world",
+        config: true,
+        default: 0.5,
+        type: Number,
+        range: {
+            min: 0,
+            max: 1,
+            step: 0.05
+        }
+    });
+
+    game.settings.register(MODULE_ID, "AudioPreview.LoopMode", {
+        name: game.i18n.localize("AudioPreview.Settings.LoopMode.Title"),
+        hint: game.i18n.localize("AudioPreview.Settings.LoopMode.Description"),
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean
+    });
+
+})

@@ -1,0 +1,6 @@
+{
+  "AudioPreview.Settings.Volume.Title": "Volume",
+  "AudioPreview.Settings.Volume.Description": "Set playback volume of all audio files listened in file picker",
+  "AudioPreview.Settings.LoopMode.Title": "Loop playback?",
+  "AudioPreview.Settings.LoopMode.Description": "If activated, audio files will loop when listening in file picker."
+}

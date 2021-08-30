@@ -1,0 +1,6 @@
+{
+  "AudioPreview.Settings.Volume.Title": "Volume",
+  "AudioPreview.Settings.Volume.Description": "Modifie le volume des fichiers audio lus dans l'explorateur de fichier.",
+  "AudioPreview.Settings.LoopMode.Title": "Lecture en boucle ?",
+  "AudioPreview.Settings.LoopMode.Description": "Si actif, les fichiers audio seront lu en boucle dans l'explorateur de fichier."
+}
