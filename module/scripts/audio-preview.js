@@ -1,11 +1,6 @@
 'use strict';
-const MODULE_ID = "sound-preview";
-const CONTROLS_TEMPLATE_PATH = `modules/${MODULE_ID}/module/templates/sound-controls.hbs`;
-
-let selectedTrack = undefined;
-let selectedSound = undefined;
-let loopMode = false;
-
+const MODULE_ID = "audio-preview";
+const CONTROLS_TEMPLATE_PATH = `modules/${MODULE_ID}/module/templates/audio-controls.hbs`;
 
 class AudioPreview {
     constructor() {
@@ -15,7 +10,7 @@ class AudioPreview {
     }
 
     _canPlayback(){
-        return ["wav", "mp3"].includes(this.selectedTrack.split('.').pop().toLowerCase())
+        return ["wav", "mp3", "flac"].includes(this.selectedTrack.split('.').pop().toLowerCase())
     }
 
     async _renderControls() {
@@ -35,8 +30,8 @@ class AudioPreview {
         $(button).find("i").toggleClass(["fa-play", "fa-stop"]);
     }
 
-    async _activateListeners(controls) {
-        controls.find(".play-button").on('click', async (event) => {
+    async _activateListeners(button) {
+        button.on('click', async (event) => {
             event.preventDefault();
             if (!this._canPlayback()) {
                 // not a sound file, do nothing
@@ -48,36 +43,24 @@ class AudioPreview {
                     return;
                 }
 
-                if (this.selectedTrack !== undefined && (this.selectedSound === undefined || this.selectedSound.src !== this.selectedTrack) ) {
-                    this.selectedSound = new Sound(this.selectedTrack);
-                    this.selectedSound.on('end', () => this._switchPlayStopIcon(event.currentTarget));
-                }
-
-                if (!this.selectedSound.loaded)
-                    await this.selectedSound.load();
-
+                this.selectedSound = await AudioHelper.play({src: this.selectedTrack, volume: 0.5}, false);
+                this.selectedSound.on('end', () => this._switchPlayStopIcon(event.currentTarget));
                 this._switchPlayStopIcon(event.currentTarget);
-                if (this.selectedSound.playing)
-                    await this.selectedSound.stop();
-                else
-                   await this.selectedSound.play({volume: 100, loop: false});
             }
         });
-
-        controls.find(".loop-button").on('click', async function(event) {
-            this.loopMode = !this.loopMode;
-            if (this.selectedSound)
-                this.selectedSound.loop = loopMode;
-        })
     }
 
     async _onRenderFilePicker(app, html, data) {
-        const submitButton = html.find("footer.form-footer button[type='submit']");
-        const controls = $(await this._renderControls());
+        //const playButtonHtml = await this._renderControls();
 
-        await this._activateListeners(controls);
-        controls.insertBefore(submitButton);
-        app.setPosition(app.left, app.top, app.width, app.height, app.scale);
+        const playButton = $("<button>") // $(playButtonHtml);
+        playButton.append($("<i>").addClass([ "fas", (this.selectedSound && this.selectedSound.playing) ? "fa-stop" : "fa-play"]));
+        $("footer.form-footer > .selected-file").append(playButton);
+        await this._activateListeners(playButton);
+        playButton.css({
+            "max-width": "30px",
+            "margin-left": "5px"
+        });
     }
 
 }

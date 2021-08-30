@@ -1,3 +1,8 @@
+.audio-preview .play-button {
+    max-width: 35px;
+    margin-left: 5px;
+}
+/*
 .sound-controls button.play-button {
     max-width: 35px;
 }
@@ -9,3 +14,4 @@
 .sound-controls button.loop-button {
 
 }
+*/

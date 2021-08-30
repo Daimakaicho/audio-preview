@@ -1,2 +1,2 @@
-# sound-preview
-This module allow to preview a sound from file picker.
+# audio-preview
+This module allows to preview an audio file from file picker.
