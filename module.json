@@ -11,9 +11,6 @@
     "esmodules": [
         "module/scripts/audio-preview.js"
     ],
-    "styles":[
-        "module/styles/audio-controls.css"
-    ],
     "dependencies": [
         {
             "name": "lib-wrapper",
