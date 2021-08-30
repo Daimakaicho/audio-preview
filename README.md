@@ -4,8 +4,6 @@ This simple module allows to preview an audio file from file picker. LibWrapper 
 
 ## Features
  * Add a Play button next to selected file name in file picker
- * Support MP3, WAV, OGG, FLAC and WEBM.  
-
-## Planned features
- * add a volume slider in module configuration
- * add a loop toggle in module configuration
+ * Set playback volume
+ * Support loop mode
+ * Support MP3, WAV, OGG, FLAC and WEBM
