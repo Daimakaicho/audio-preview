@@ -7,7 +7,7 @@
 		"Daimakaicho#5991"
 	],
     "minimumCoreVersion": "0.7.9",
-    "compatibleCoreVersion": "0.8.8",
+    "compatibleCoreVersion": "0.8.9",
     "esmodules": [
         "module/scripts/audio-preview.js"
     ],
