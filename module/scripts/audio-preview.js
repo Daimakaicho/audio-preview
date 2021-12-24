@@ -17,7 +17,7 @@ class AudioPreview {
     }
 
     _canPlayback(){
-        return this.selectedTrack ? CONST.AUDIO_FILE_EXTENSIONS.includes(this.selectedTrack.split('.').pop().toLowerCase()) : false;
+        return this.selectedTrack ? Object.keys(CONST.AUDIO_FILE_EXTENSIONS).includes(this.selectedTrack.split('.').pop().toLowerCase()) : false;
     }
 
     async _onPick(args) {
