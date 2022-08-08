@@ -2,7 +2,8 @@
     "id": "audio-preview",
     "title": "Audio Preview",
     "description": "This module allow to preview an audio file from file picker.",
-    "version": "0.0.1",    
+    "version": "0.0.1",
+    "minimumCoreVersion": "10", 
     "compatibility": {
         "minimum": "10.276",
         "verified": "10.276",
