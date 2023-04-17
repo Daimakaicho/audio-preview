@@ -2,11 +2,11 @@
     "id": "audio-preview",
     "title": "Audio Preview",
     "description": "This module allow to preview an audio file from file picker.",
-    "version": "0.0.1",
-    "minimumCoreVersion": "10", 
+    "version": "1.1",
+    "minimumCoreVersion": "11",
     "compatibility": {
-        "minimum": "10",
-        "verified": "10.283"
+        "minimum": "11",
+        "verified": "11.295"
     },
     "authors": [
         {
@@ -16,6 +16,9 @@
     ],
     "esmodules": [
         "module/scripts/audio-preview.js"
+    ],
+    "styles": [
+        "module/styles/audio-preview.css"
     ],
     "relationships": {
         "requires": [
@@ -41,7 +44,7 @@
             "path": "module/languages/fr.json"
         }
     ],
-    "url": "https://github.com/Daimakaicho/audio-preview",
-    "manifest": "https://github.com/Daimakaicho/audio-preview/releases/latest/download/module.json",
-    "download": "https://github.com/Daimakaicho/audio-preview/releases/download/0.0.1/module.zip"
+    "url": "https://github.com/MiahNelah/audio-preview",
+    "manifest": "https://github.com/MiahNelah/audio-preview/releases/download/1.1/module.json",
+    "download": "https://github.com/MiahNelah/audio-preview/releases/download/1.1/module.zip"
 }

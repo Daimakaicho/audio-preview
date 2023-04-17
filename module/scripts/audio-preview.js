@@ -16,7 +16,7 @@ class AudioPreview {
         this.selectedSound = undefined;
     }
 
-    _canPlayback(){
+    _canPlayback() {
         return this.selectedTrack ? Object.keys(CONST.AUDIO_FILE_EXTENSIONS).includes(this.selectedTrack.split('.').pop().toLowerCase()) : false;
     }
 
@@ -91,18 +91,13 @@ class AudioPreview {
     }
 
     async _onRenderFilePicker(app, html, data) {
+        const template = $(await renderTemplate("modules/audio-preview/module/templates/preview-button.hbs"));
+        html.find("div.form-group.selected-file").append(template);
+        const playButton = html.find("button.audio-preview-button");
 
-        const playButton = $("<button>");
-        playButton.append($("<i>").addClass("fas"));
         await this._activateListeners(playButton);
         this._playButton = playButton;
         this._applyState();
-
-        html.find("footer.form-footer > .selected-file").append(playButton);
-        playButton.css({
-            "max-width": "30px",
-            "margin-left": "5px"
-        });
     }
 
 }
