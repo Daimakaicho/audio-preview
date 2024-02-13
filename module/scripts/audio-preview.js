@@ -23,6 +23,12 @@ class AudioPreview {
     async _onPick(args) {
         const li = args[0].currentTarget;
         this.selectedTrack = li.dataset.path;
+        console.log(this.selectedSound);
+        if (this.selectedSound) {
+            this.selectedSound.stop();
+            this.selectedSound = undefined;
+            this.state = AudioPreview.PLAY_STATE.WAITING;
+        }
         this._applyState();
     }
 
@@ -70,9 +76,11 @@ class AudioPreview {
     async _onClick() {
         if (this.state === AudioPreview.PLAY_STATE.PLAYING) {
             this.selectedSound.stop();
+            this.selectedSound = undefined;
             this.state = AudioPreview.PLAY_STATE.WAITING;
             return;
         }
+
         this.state = AudioPreview.PLAY_STATE.LOADING;
         this.selectedSound = await AudioHelper.play({
             src: this.selectedTrack,
@@ -100,20 +108,31 @@ class AudioPreview {
         this._applyState();
     }
 
+    async _onSubmit() {
+        if (this.selectedSound) {
+            this.selectedSound.stop();
+            this.selectedSound = undefined;
+        }
+    }
+
 }
 
 Hooks.once('init', async () => {
     game.soundPreview = new AudioPreview();
 
     libWrapper.register(MODULE_ID, "FilePicker.prototype._onPick", async function (wrapper, ...args) {
-        await wrapper(...args);
         await game.soundPreview._onPick(args);
+        return await wrapper(...args);        
+    });
+
+    libWrapper.register(MODULE_ID, "FilePicker.prototype._onSubmit", async function (wrapper, ...args) {
+        await game.soundPreview._onSubmit();
+        return await wrapper(...args);        
     });
 
     Hooks.on('renderFilePicker', async (app, html, data) => {
         await game.soundPreview._onRenderFilePicker(app, html, data);
     });
-    //await game.soundPreview.loadControls();
 })
 
 Hooks.once('ready', async () => {
